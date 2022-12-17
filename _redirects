@@ -9,7 +9,13 @@
 # Setting a layout forces Jekyll to render this file
 layout: null
 ---
-{%- for page in site.pages -%}
+# Rewrite for /api/v1/
+# All API responses are located in an index.json and must be accessible without the file name, such as :
+# - /api/v1/index.json -> /api/v1/
+# - /api/v1/products/almalinux/index.json -> /api/v1/products/almalinux/
+/api/v1/*       /api/v1/:splat/index.json       200!
+
+{% for page in site.pages -%}
 # Redirects for {{page.path}}
   {%- if page.alternate_urls %}
     {%- for url in page.alternate_urls %}
