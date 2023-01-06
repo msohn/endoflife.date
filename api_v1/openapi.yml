@@ -1,0 +1,351 @@
+---
+# API v1 description. See https://spec.openapis.org/oas/v3.1.0 for specification.
+# Edit using https://editor.swagger.io/.
+
+permalink: /docs/api/v1/openapi.yml
+layout: null
+---
+openapi: 3.0.3
+
+info:
+  title: endoflife API
+  version: "1.0.0-b1"
+  license:
+    name: MIT License
+    url: 'https://github.com/endoflife-date/endoflife.date/blob/master/LICENSE'
+  description: >-
+    endoflife.date documents EOL dates and support lifecycles for various products.
+    The endoflife API allows users to discover and query for those products.
+
+
+    Some useful links:
+
+    - [The endoflife.date website](https://endoflife.date/)
+
+    - [The endoflife.date repository](https://github.com/endoflife-date/endoflife.date)
+
+    - [The endoflife.date issue tracker](https://github.com/endoflife-date/endoflife.date/issues/)
+
+    - [The source API definition](https://github.com/endoflife-date/endoflife.date/blob/master/assets/openapi.yml)
+
+# Replace with your preview URL (such as https://deploy-preview-2080--endoflife-date.netlify.app/api/v1).
+servers:
+  - url: {{ site.url }}/api/v1
+
+paths:
+  /:
+    get:
+      summary: Get a list of the endoflife.date API endpoints
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UriList'
+
+  /products:
+    get:
+      summary: Get a list of the products referenced by endoflife.date
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+
+  /products/{product}/:
+    get:
+      summary: Get a product detailed information
+      parameters:
+        - name: product
+          in: path
+          description: 'The name of the product.'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+  /products/{product}/cycles/{cycle}:
+    get:
+      summary: Get a product cycle detailed information
+      parameters:
+        - name: product
+          in: path
+          description: 'The name of the product.'
+          required: true
+          schema:
+            type: string
+        - name: cycle
+          in: path
+          description: 'The name of the cycle.'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCycle'
+
+  /products/{product}/cycles/latest/:
+    get:
+      summary: Get the latest product cycle detailed information
+      parameters:
+        - name: product
+          in: path
+          description: 'The name of the product.'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCycle'
+
+  /categories:
+    get:
+      summary: Get the list of all the categories
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UriList'
+
+  /categories/{category}:
+    get:
+      summary: Get the list of all the products in the given category
+      parameters:
+        - name: category
+          in: path
+          description: 'The name of the category.'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+
+  /tags:
+    get:
+      summary: Get the list of all the tags
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UriList'
+
+  /tags/{tag}:
+    get:
+      summary: Get the list of all the products having the given tag
+      parameters:
+        - name: tag
+          in: path
+          description: 'The name of the tag.'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+
+components:
+  schemas:
+    Uri:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the URI
+          example: endoflife
+        uri:
+          type: string
+          format: uri
+          description: URI
+          example: {{ site.url }}
+
+    UriList:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Uri'
+
+    ProductListItem:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the product
+          example: debian
+        title:
+          type: string
+          description: Title of the product
+          example: Debian GNU/Linux
+        category:
+          type: string
+          description: Category of the product
+          example: os
+        tags:
+          type: array
+          description: Tags associated to the product
+          items:
+            type: string
+        uri:
+          type: string
+          format: uri
+          description: API URI
+          example: {{ site.url }}/api/v1/products/debian/
+
+    ProductList:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: Number of products in the list.
+          example: 1
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductListItem'
+
+    ProductVersion:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the version.
+          example: 11.6
+        date:
+          type: string
+          format: date
+          description: Release date.
+          example: 2022-12-17
+        link:
+          type: string
+          format: uri
+          description: Link to the changelog or release notes.
+          example: https://www.debian.org/News/2022/2022091002
+
+    ProductCycle:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the product cycle.
+          example: 11
+        codename:
+          type: string
+          description: Name of the product cycle.
+          example: Bullseye
+        label:
+          type: string
+          description: Label of the product cycle.
+          example: 11 (Bullseye) (Upcoming LTS)
+        date:
+          type: string
+          format: date
+          description: Date of the first version of the cyclev
+          example: 2021-08-14
+        support:
+          type: [string, boolean, 'null']
+          format: date
+          description: End of active support date, or true / false to indicate whether or not the product cycle is still supported.
+          example: 2021-08-14
+        lts:
+          type: [string, boolean, 'null']
+          format: date
+          description: Start date of the LTS phase, or true / false to indicate whether or not the product cycle is LTS.
+          example: 2021-08-14
+        eol:
+          type: [string, boolean]
+          format: date
+          description: End of life date, or true / false to indicate whether or not the product cycle is EOL.
+          example: 2026-08-15
+        discontinued:
+          type: [string, boolean, 'null']
+          format: date
+          description: Discontinued date, or true / false to indicate whether or not the product cycle is discontinued (mainly used for hardware).
+          example: 2026-08-15
+        extendedSupport:
+          type: [string, boolean, 'null']
+          format: date
+          description: End of extended support date, or true / false to indicate whether or not the product cycle is still in the extended support phase.
+          example: 2029-08-15
+        latest:
+          type: object
+          $ref: '#/components/schemas/ProductVersion'
+
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the product.
+          example: debian
+        label:
+          type: string
+          description: Label of the product.
+          example: Debian GNU/Linux
+        category:
+          type: string
+          description: Category of the product.
+          example: os
+        tags:
+          type: array
+          description: Tags associated to the productv
+          items:
+            type: string
+        links:
+          type: array
+          description: API links (such as the Icon URL, the releasePolicyLink...).
+          items:
+            $ref: '#/components/schemas/Uri'
+        versionCommand:
+          type: string
+          description: Command that can be used to check the current product version.
+          example: cat /etc/os-release
+        auto:
+          type: boolean
+          description: Whether or not product versions are automatically updated.
+          example: true
+        cycles:
+          type: array
+          description: Product release cycles.
+          items:
+            $ref: '#/components/schemas/ProductCycle'
