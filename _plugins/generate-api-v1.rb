@@ -195,7 +195,7 @@ module ApiV1
                    discontinued: cycle['discontinued'],
                    extendedSupport: cycle['extendedSupport'],
                    latest: {
-                     version: cycle['latest'],
+                     name: cycle['latest'],
                      date: cycle['latestReleaseDate'],
                      link: cycle['link'],
                    }
