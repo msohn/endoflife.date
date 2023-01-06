@@ -29,11 +29,11 @@ module ApiV1
     safe true
     priority :lowest
 
-    TOPIC = "EndOfLife API v1:"
+    TOPIC = "API v1:"
 
     def generate(site)
       @site = site
-      Jekyll.logger.info TOPIC, "Generating API for products"
+      Jekyll.logger.info TOPIC, "Generating..."
 
       add_index_page(site)
       product_pages = add_product_pages(site)
@@ -44,6 +44,7 @@ module ApiV1
 
       add_tag_pages(site, product_pages)
       add_all_tags_page(site, product_pages)
+      Jekyll.logger.info TOPIC, "Generation done."
     end
 
     private
@@ -178,7 +179,8 @@ module ApiV1
           releasePolicyLink: product.data['releasePolicyLink'],
         },
         versionCommand: product.data['versionCommand'],
-        lastModified: product.data['lastModified'],
+        # https://github.com/gjtorikian/jekyll-last-modified-at/blob/master/lib/jekyll-last-modified-at/determinator.rb
+        lastModified: product.data['last_modified_at'].last_modified_at_time.iso8601,
         auto: product.data.has_key?('auto'),
         cycles: [
           product.data['releases']
