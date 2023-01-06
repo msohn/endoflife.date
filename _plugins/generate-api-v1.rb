@@ -156,7 +156,7 @@ module ApiV1
         total: products.size(),
         products: products.map { |product| {
           name: product.data['id'],
-          title: product.data['title'],
+          label: product.data['title'],
           category: product.data['category'],
           tags: product.data['tags'],
           uri: "#{site.config['url']}/api/v1/products/#{product.data['id']}/",

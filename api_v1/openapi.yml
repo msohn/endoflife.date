@@ -212,9 +212,9 @@ components:
           type: string
           description: Name of the product
           example: debian
-        title:
+        label:
           type: string
-          description: Title of the product
+          description: Label of the product
           example: Debian GNU/Linux
         category:
           type: string
