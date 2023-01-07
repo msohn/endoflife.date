@@ -250,12 +250,12 @@ components:
         name:
           type: string
           description: Name of the version.
-          example: 11.6
+          example: "11.6"
         date:
           type: string
           format: date
           description: Release date.
-          example: 2022-12-17
+          example: "2022-12-17"
         link:
           type: string
           format: uri
@@ -268,9 +268,10 @@ components:
         name:
           type: string
           description: Name of the product cycle.
-          example: 11
+          example: "11"
         codename:
           type: string
+          nullable: true
           description: Name of the product cycle.
           example: Bullseye
         label:
@@ -280,33 +281,47 @@ components:
         date:
           type: string
           format: date
-          description: Date of the first version of the cyclev
-          example: 2021-08-14
+          description: Date of the first version of the cycle.
+          example: "2021-08-14"
         support:
-          type: [string, boolean, 'null']
-          format: date
+          oneOf:
+            - type: string
+              format: date
+            - type: boolean
+          nullable: true
           description: End of active support date, or true / false to indicate whether or not the product cycle is still supported.
-          example: 2021-08-14
+          example: "2021-08-14"
         lts:
-          type: [string, boolean, 'null']
-          format: date
+          oneOf:
+            - type: string
+              format: date
+            - type: boolean
+          nullable: true
           description: Start date of the LTS phase, or true / false to indicate whether or not the product cycle is LTS.
-          example: 2021-08-14
+          example: "2021-08-14"
         eol:
-          type: [string, boolean]
-          format: date
+          oneOf:
+            - type: string
+              format: date
+            - type: boolean
           description: End of life date, or true / false to indicate whether or not the product cycle is EOL.
-          example: 2026-08-15
+          example: "2026-08-15"
         discontinued:
-          type: [string, boolean, 'null']
-          format: date
+          oneOf:
+            - type: string
+              format: date
+            - type: boolean
+          nullable: true
           description: Discontinued date, or true / false to indicate whether or not the product cycle is discontinued (mainly used for hardware).
-          example: 2026-08-15
+          example: "2026-08-15"
         extendedSupport:
-          type: [string, boolean, 'null']
-          format: date
+          oneOf:
+            - type: string
+              format: date
+            - type: boolean
+          nullable: true
           description: End of extended support date, or true / false to indicate whether or not the product cycle is still in the extended support phase.
-          example: 2029-08-15
+          example: "2029-08-15"
         latest:
           type: object
           $ref: '#/components/schemas/ProductVersion'
