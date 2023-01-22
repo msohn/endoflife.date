@@ -200,6 +200,10 @@ components:
     UriList:
       type: object
       properties:
+        schema_version:
+          type: string
+          description: Version of this schema.
+          example: 1.0.0
         result:
           type: array
           items:
@@ -234,6 +238,10 @@ components:
     ProductList:
       type: object
       properties:
+        schema_version:
+          type: string
+          description: Version of this schema.
+          example: 1.0.0
         total:
           type: integer
           format: int32
@@ -265,6 +273,10 @@ components:
     ProductCycle:
       type: object
       properties:
+        schema_version:
+          type: string
+          description: Version of this schema.
+          example: 1.0.0
         name:
           type: string
           description: Name of the product cycle.
@@ -329,6 +341,10 @@ components:
     Product:
       type: object
       properties:
+        schema_version:
+          type: string
+          description: Version of this schema.
+          example: 1.0.0
         name:
           type: string
           description: Name of the product.

@@ -1,12 +1,24 @@
 # This script creates API files for version 1 of the endoflife.date API.
 #
-# There are two kind of generated files :
-# - all.json: contains endoflife metadata, such as the list of all the products and the product count.
-# - <product>.json: contains a given product data (including releases data).
+# There are multiples endpoints :
+#
+# - /api/v1/ - list all major endpoints (those not requiring a parameter)
+# - /api/v1/products/ - list all products
+# - /api/v1/products/<product>/ - get a single product details
+# - /api/v1/products/<product>/latest - get details on the latest cycle for the given product
+# - /api/v1/products/<product>/<cycle> - get details on the given cycle for the given product
+# - /api/v1/categories/ - list categories used on endoflife.date
+# - /api/v1/categories/<category> - list products having the given category
+# - /api/v1/tags/ - list tags used on endoflife.date
+# - /api/v1/tags/<tag> - list products having the given tag
+
 
 require 'jekyll'
 
 module ApiV1
+
+  VERSION = '1.0.0-b1'
+  MAJOR_VERSION = VERSION.split('.')[0]
 
   STRIP_HTML_BLOCKS = Regexp.union(
     /<script.*?<\/script>/m,
@@ -29,7 +41,7 @@ module ApiV1
     safe true
     priority :lowest
 
-    TOPIC = "API v1:"
+    TOPIC = "API " + ApiV1::VERSION + ":"
 
     def generate(site)
       @site = site
@@ -53,9 +65,9 @@ module ApiV1
       site_url = site.config['url']
       site.pages << JsonPage.new(site, '/', 'index', {
         result: [
-          { name: "products", uri: "#{site_url}/api/v1/products/" },
-          { name: "categories", uri: "#{site_url}/api/v1/categories/" },
-          { name: "tags", uri: "#{site_url}/api/v1/tags/" },
+          { name: "products", uri: "#{site_url}/api/v#{ApiV1::MAJOR_VERSION}/products/" },
+          { name: "categories", uri: "#{site_url}/api/v#{ApiV1::MAJOR_VERSION}/categories/" },
+          { name: "tags", uri: "#{site_url}/api/v#{ApiV1::MAJOR_VERSION}/tags/" },
         ]
       })
     end
@@ -101,7 +113,7 @@ module ApiV1
                   .map { |product| product.data['category'] }
                   .uniq
                   .sort
-                  .map { |category| { name: category, uri: "#{site.config['url']}/api/v1/categories/#{category}/" } }
+                  .map { |category| { name: category, uri: "#{site.config['url']}/api/v#{ApiV1::MAJOR_VERSION}/categories/#{category}/" } }
       })
     end
 
@@ -123,7 +135,7 @@ module ApiV1
                   .flat_map { |product| product.data['tags'] }
                   .uniq
                   .sort
-                  .map { |tag| { name: tag, uri: "#{site.config['url']}/api/v1/tags/#{tag}/" } }
+                  .map { |tag| { name: tag, uri: "#{site.config['url']}/api/v#{ApiV1::MAJOR_VERSION}/tags/#{tag}/" } }
       })
     end
 
@@ -140,11 +152,12 @@ module ApiV1
     def initialize(site, path, name, data)
       @site = site
       @base = site.source
-      @dir = "api/v1#{path}"
+      @dir = "api/v#{ApiV1::MAJOR_VERSION}#{path}"
       @name = "#{name}.json"
       @data = {}
       @data['layout'] = 'json'
       @data['data'] = data
+      @data['data']['schema_version'] = ApiV1::VERSION
 
       self.process(@name)
     end
@@ -159,7 +172,7 @@ module ApiV1
           label: product.data['title'],
           category: product.data['category'],
           tags: product.data['tags'],
-          uri: "#{site.config['url']}/api/v1/products/#{product.data['id']}/",
+          uri: "#{site.config['url']}/api/v#{ApiV1::MAJOR_VERSION}/products/#{product.data['id']}/",
         } }
       })
     end
