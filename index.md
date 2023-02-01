@@ -1,6 +1,7 @@
 ---
 layout: page
 nav_exclude: true
+search_exclude: true
 title: Home
 # This is the content for the website homepage (https://endoflife.date/)
 ---
