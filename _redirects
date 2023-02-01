@@ -28,3 +28,9 @@ layout: null
   {%- endif %}
 
 {% endfor %}
+
+# Clients will try to access /favicon.ico, in some scenarios
+# we don't want the file in our codebase, because the theme
+# embeds it as a favicon, so instead set a redirect for
+# these clients to a PNG file instead.
+/favicon.ico /assets/favicon-32x32.png
