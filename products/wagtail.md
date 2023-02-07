@@ -17,6 +17,14 @@ identifiers:
 -   purl: pkg:pypi/wagtail
 
 releases:
+-   releaseCycle: "4.2"
+    support: 2023-05-02
+    lts: false
+    eol: 2023-08-01
+    latest: "4.2"
+    latestReleaseDate: 2023-02-06
+    releaseDate: 2023-02-06
+
 -   releaseCycle: "4.1"
     support: 2024-02-01
     lts: true
